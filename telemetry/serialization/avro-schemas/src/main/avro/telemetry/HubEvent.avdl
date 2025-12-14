@@ -1,4 +1,72 @@
 @namespace("ru.yandex.practicum.kafka.telemetry.event")
 protocol HubEventProtocol {
 
+	enum DeviceTypeAvro {
+		MOTION_SENSOR, TEMPERATURE_SENSOR, LIGHT_SENSOR, CLIMATE_SENSOR, SWITCH_SENSOR
+	}
+
+	enum ConditionTypeAvro {
+		MOTION, LUMINOSITY, SWITCH, TEMPERATURE, CO2LEVEL, HUMIDITY
+	}
+
+	enum ConditionOperationAvro {
+		EQUALS, GREATER_THAN, LOWER_THAN
+	}
+
+	enum ActionTypeAvro {
+		ACTIVATE, DEACTIVATE, INVERSE, SET_VALUE
+	}
+
+	//enum HubEventTypeAvro {
+	//	DEVICE_ADDED, DEVICE_REMOVED, SCENARIO_ADDED, SCENARIO_REMOVED
+	//}
+
+
+	record DeviceAddedEventAvro {
+		string id; //Идентификатор добавленного устройства.
+		DeviceTypeAvro type;
+	}
+
+	record DeviceRemovedEventAvro {
+		string id; //Идентификатор удаленного устройства.
+	}
+
+	record DeviceActionAvro {
+		string sensorId; //Идентификатор датчика, связанного с действием.
+		ActionTypeAvro type; //Перечисление возможных типов действий при срабатывании условия активации сценария.
+		union {null, int} value = null; //Необязательное значение, связанное с действием.
+	}
+
+	record ScenarioAddedEventAvro {
+		string name; //Название добавленного сценария. Должно содержать не менее 3 символов.
+		//				maxLength: 2147483647
+		//				minLength: 3
+		array<ScenarioConditionAvro> conditions; //Список условий, которые связаны со сценарием. Не может быть пустым.
+		array<DeviceActionAvro> actions; //Список действий, которые должны быть выполнены в рамках сценария. Не может быть пустым.
+	}
+
+	record ScenarioConditionAvro {
+		string sensorId; //Идентификатор датчика, связанного с условием.
+		ConditionTypeAvro type; //Типы условий, которые могут использоваться в сценариях.
+		ConditionOperationAvro operation; //Операции, которые могут быть использованы в условиях.
+		union {null, int, boolean } value = null; //Значение, используемое в условии.
+	}
+
+	record ScenarioRemovedEventAvro {
+		string name; //Название удаленного сценария. Должно содержать не менее 3 символов.
+		//		maxLength: 2147483647
+		//		minLength: 3
+	}
+
+	record HubEventAvro {
+		string hubId;
+		timestamp_ms timestamp;
+		union {
+			DeviceAddedEventAvro,
+			DeviceRemovedEventAvro,
+			ScenarioAddedEventAvro,
+			ScenarioRemovedEventAvro
+		} payload;
+	}
+
 }
