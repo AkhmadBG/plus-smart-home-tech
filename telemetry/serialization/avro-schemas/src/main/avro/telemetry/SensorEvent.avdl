@@ -2,35 +2,35 @@
 protocol SensorEventProtocol {
 
 	record ClimateSensorEventAvro {
-		int temperatureC; //Уровень температуры по шкале Цельсия.
-		int humidity; //Влажность.
-		int co2Level; //Уровень CO2.
+		int temperatureC;
+		int humidity;
+		int co2Level;
 	}
 
 	record LightSensorEventAvro {
-		int linkQuality; //Качество связи.
-		int luminosity;	//Уровень освещенности.
+		int linkQuality;
+		int luminosity;
 	}
 
 	record MotionSensorEventAvro {
-		int linkQuality; //Качество связи.
-		boolean motion; //Наличие/отсутствие движения.
-		int voltage; //Напряжение.
+		int linkQuality;
+		boolean motion;
+		int voltage;
 	}
 
 	record SwitchSensorEventAvro {
-		boolean state; //Текущее состояние переключателя. true - включен, false - выключен.
+		boolean state;
 	}
 
 	record TemperatureSensorEventAvro {
-		int temperatureC; // Температура в градусах Цельсия.
-		int temperatureF; // Температура в градусах Фаренгейта.
+		int temperatureC;
+		int temperatureF;
 	}
 
 	record SensorEventAvro {
-		string id; //Идентификатор события датчика.
-		string hubId; //Идентификатор хаба, связанного с событием.
-		timestamp_ms timestamp; //Временная метка события. По умолчанию устанавливается текущее время.
+		string id;
+		string hubId;
+		timestamp_ms timestamp;
 		union {
 			ClimateSensorEventAvro,
 			LightSensorEventAvro,

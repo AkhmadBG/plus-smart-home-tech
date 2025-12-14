@@ -11,7 +11,7 @@ public class GeneralAvroDeserializer implements Deserializer<SpecificRecordBase>
     @Override
     public SpecificRecordBase deserialize(String topic, byte[] bytes) {
 
-            return null;
+        return null;
 
     }
 

@@ -11,25 +11,6 @@ import org.apache.kafka.common.serialization.Serializer;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 
-//public class GeneralAvroSerializer implements Serializer<SpecificRecordBase> {
-//    private final EncoderFactory encoderFactory = EncoderFactory.get();
-//    private BinaryEncoder encoder;
-//
-//    public byte[] serialize(String topic, SpecificRecordBase data) {
-//        try (ByteArrayOutputStream out = new ByteArrayOutputStream()) {
-//            if (data != null) {
-//                DatumWriter<SpecificRecordBase> writer = new SpecificDatumWriter<>(data.getSchema());
-//                encoder = encoderFactory.binaryEncoder(out, encoder);
-//                writer.write(data, encoder);
-//                encoder.flush();
-//            }
-//            return out.toByteArray();
-//        } catch (IOException ex) {
-//            throw new SerializationException("Ошибка сериализации данных для топика [" + topic + "]", ex);
-//        }
-//    }
-//}
-
 public class GeneralAvroSerializer implements Serializer<SpecificRecordBase> {
     private final EncoderFactory encoderFactory = EncoderFactory.get();
     private BinaryEncoder encoder;

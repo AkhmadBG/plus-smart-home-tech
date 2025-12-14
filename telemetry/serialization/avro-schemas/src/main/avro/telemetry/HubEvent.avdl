@@ -17,45 +17,36 @@ protocol HubEventProtocol {
 		ACTIVATE, DEACTIVATE, INVERSE, SET_VALUE
 	}
 
-	//enum HubEventTypeAvro {
-	//	DEVICE_ADDED, DEVICE_REMOVED, SCENARIO_ADDED, SCENARIO_REMOVED
-	//}
-
-
 	record DeviceAddedEventAvro {
-		string id; //Идентификатор добавленного устройства.
+		string id;
 		DeviceTypeAvro type;
 	}
 
 	record DeviceRemovedEventAvro {
-		string id; //Идентификатор удаленного устройства.
+		string id;
 	}
 
 	record DeviceActionAvro {
-		string sensorId; //Идентификатор датчика, связанного с действием.
-		ActionTypeAvro type; //Перечисление возможных типов действий при срабатывании условия активации сценария.
-		union {null, int} value = null; //Необязательное значение, связанное с действием.
+		string sensorId;
+		ActionTypeAvro type;
+		union {null, int} value = null;
 	}
 
 	record ScenarioAddedEventAvro {
-		string name; //Название добавленного сценария. Должно содержать не менее 3 символов.
-		//				maxLength: 2147483647
-		//				minLength: 3
-		array<ScenarioConditionAvro> conditions; //Список условий, которые связаны со сценарием. Не может быть пустым.
-		array<DeviceActionAvro> actions; //Список действий, которые должны быть выполнены в рамках сценария. Не может быть пустым.
+		string name;
+		array<ScenarioConditionAvro> conditions;
+		array<DeviceActionAvro> actions;
 	}
 
 	record ScenarioConditionAvro {
-		string sensorId; //Идентификатор датчика, связанного с условием.
-		ConditionTypeAvro type; //Типы условий, которые могут использоваться в сценариях.
-		ConditionOperationAvro operation; //Операции, которые могут быть использованы в условиях.
-		union {null, int, boolean } value = null; //Значение, используемое в условии.
+		string sensorId;
+		ConditionTypeAvro type;
+		ConditionOperationAvro operation;
+		union {null, int, boolean } value = null;
 	}
 
 	record ScenarioRemovedEventAvro {
-		string name; //Название удаленного сценария. Должно содержать не менее 3 символов.
-		//		maxLength: 2147483647
-		//		minLength: 3
+		string name;
 	}
 
 	record HubEventAvro {
