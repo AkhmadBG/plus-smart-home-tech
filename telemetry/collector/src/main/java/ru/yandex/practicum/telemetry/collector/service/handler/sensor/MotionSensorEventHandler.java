@@ -7,8 +7,6 @@ import ru.yandex.practicum.kafka.telemetry.event.MotionSensorEventAvro;
 import ru.yandex.practicum.kafka.telemetry.event.SensorEventAvro;
 import ru.yandex.practicum.telemetry.collector.kafka.KafkaClient;
 import ru.yandex.practicum.telemetry.collector.model.MotionSensorEvent;
-import ru.yandex.practicum.telemetry.collector.model.SensorEvent;
-import ru.yandex.practicum.telemetry.collector.model.SensorEventType;
 
 import java.time.Instant;
 

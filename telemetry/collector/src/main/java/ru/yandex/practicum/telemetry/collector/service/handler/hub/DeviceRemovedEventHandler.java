@@ -7,8 +7,6 @@ import ru.yandex.practicum.kafka.telemetry.event.DeviceRemovedEventAvro;
 import ru.yandex.practicum.kafka.telemetry.event.HubEventAvro;
 import ru.yandex.practicum.telemetry.collector.kafka.KafkaClient;
 import ru.yandex.practicum.telemetry.collector.model.DeviceRemovedEvent;
-import ru.yandex.practicum.telemetry.collector.model.HubEvent;
-import ru.yandex.practicum.telemetry.collector.model.HubEventType;
 
 import java.time.Instant;
 
