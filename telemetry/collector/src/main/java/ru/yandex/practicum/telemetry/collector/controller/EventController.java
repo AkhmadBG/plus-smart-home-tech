@@ -1,14 +1,14 @@
 package ru.yandex.practicum.telemetry.collector.controller;
 
-import jakarta.validation.Valid;
+import com.google.protobuf.Empty;
+import io.grpc.Status;
+import io.grpc.StatusRuntimeException;
+import io.grpc.stub.StreamObserver;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.MediaType;
-import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-import ru.yandex.practicum.telemetry.collector.model.*;
+import net.devh.boot.grpc.server.service.GrpcService;
+import ru.yandex.practicum.grpc.telemetry.collector.CollectorControllerGrpc;
+import ru.yandex.practicum.grpc.telemetry.event.HubEventProto;
+import ru.yandex.practicum.grpc.telemetry.event.SensorEventProto;
 import ru.yandex.practicum.telemetry.collector.service.handler.HubEventHandler;
 import ru.yandex.practicum.telemetry.collector.service.handler.SensorEventHandler;
 
@@ -19,13 +19,11 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 
 @Slf4j
-@Validated
-@RestController
-@RequestMapping(value = "/events", consumes = MediaType.APPLICATION_JSON_VALUE)
-public class EventController {
+@GrpcService
+public class EventController extends CollectorControllerGrpc.CollectorControllerImplBase {
 
-    private final Map<SensorEventType, SensorEventHandler> sensorEventHandlers;
-    private final Map<HubEventType, HubEventHandler> hubEventHandlers;
+    private final Map<SensorEventProto.PayloadCase, SensorEventHandler> sensorEventHandlers;
+    private final Map<HubEventProto.PayloadCase, HubEventHandler> hubEventHandlers;
 
     public EventController(List<SensorEventHandler> sensorEventHandlers, Set<HubEventHandler> hubEventHandlers) {
         this.sensorEventHandlers = sensorEventHandlers.stream()
@@ -34,23 +32,50 @@ public class EventController {
                 .collect(Collectors.toMap(HubEventHandler::getMessageType, Function.identity()));
     }
 
-    @PostMapping("/sensors")
-    public void collectSensorEvent(@Valid @RequestBody SensorEvent request) {
-        log.info("JSON отправки: {}", request.toString());
-        SensorEventHandler sensorEventHandler = sensorEventHandlers.get(request.getType());
-        if (sensorEventHandler == null) {
-            throw new IllegalArgumentException("Не могу найти событие " + request.getType());
+    @Override
+    public void collectSensorEvent(SensorEventProto request, StreamObserver<Empty> responseObserver) {
+        try {
+            log.info("JSON отправки: {}", request.getPayloadCase());
+
+            SensorEventHandler sensorEventHandler = sensorEventHandlers.get(request.getPayloadCase());
+            if (sensorEventHandler == null) {
+                throw new IllegalArgumentException("Не могу найти событие " + request.getPayloadCase());
+            }
+            sensorEventHandler.handle(request);
+
+            responseObserver.onNext(Empty.getDefaultInstance());
+            responseObserver.onCompleted();
+        } catch (Exception e) {
+            responseObserver.onError(new StatusRuntimeException(
+                    Status.INTERNAL
+                            .withDescription(e.getLocalizedMessage())
+                            .withCause(e)
+            ));
         }
-        sensorEventHandler.handle(request);
+
     }
 
-    @PostMapping("/hubs")
-    public void collectHubEvent(@Valid @RequestBody HubEvent request) {
-        HubEventHandler hubEventHandler = hubEventHandlers.get(request.getType());
-        if (hubEventHandler == null) {
-            throw new IllegalArgumentException("Не могу найти событие " + request.getType());
+    @Override
+    public void collectHubEvent(HubEventProto request, StreamObserver<Empty> responseObserver) {
+        try {
+            log.info("JSON отправки: {}", request.getPayloadCase());
+
+            HubEventHandler hubEventHandler = hubEventHandlers.get(request.getPayloadCase());
+            if (hubEventHandler == null) {
+                throw new IllegalArgumentException("Не могу найти событие " + request.getPayloadCase());
+            }
+            hubEventHandler.handle(request);
+
+            responseObserver.onNext(Empty.getDefaultInstance());
+            responseObserver.onCompleted();
+        } catch (Exception e) {
+            responseObserver.onError(new StatusRuntimeException(
+                    Status.INTERNAL
+                            .withDescription(e.getLocalizedMessage())
+                            .withCause(e)
+            ));
         }
-        hubEventHandler.handle(request);
+
     }
 
 }
