@@ -1,0 +1,36 @@
+#analyzer:
+#  kafka:
+#    common-properties:
+#      "bootstrap.servers": localhost:9092
+#      "key.serializer": "org.apache.kafka.common.serialization.StringSerializer"
+#      "value.serializer": "ru.yandex.practicum.kafka.serializer.GeneralAvroSerializer"
+#    consumers:
+#      topics: "topic"
+
+server:
+  port: 8082
+
+grpc:
+  client:
+    hub-router:
+      address: 'static://localhost:59090'
+      enableKeepAlive: true
+      keepAliveWithoutCalls: true
+      negotiationType: plaintext
+
+spring:
+  application:
+    name: analyzer
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://localhost:6541/psht_db
+    username: psht_db
+    password: psht_db
+  jpa:
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        format_sql: true
+    show-sql: true
