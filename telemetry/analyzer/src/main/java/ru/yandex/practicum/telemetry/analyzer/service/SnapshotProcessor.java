@@ -1,82 +1,3 @@
-//package ru.yandex.practicum.telemetry.analyzer.service;
-//
-//import lombok.RequiredArgsConstructor;
-//import lombok.extern.slf4j.Slf4j;
-//import org.apache.kafka.clients.consumer.ConsumerRecord;
-//import org.apache.kafka.clients.consumer.ConsumerRecords;
-//import org.apache.kafka.clients.consumer.KafkaConsumer;
-//import org.apache.kafka.clients.consumer.OffsetAndMetadata;
-//import org.apache.kafka.common.TopicPartition;
-//import org.apache.kafka.common.errors.WakeupException;
-//import org.springframework.stereotype.Component;
-//import ru.yandex.practicum.kafka.telemetry.event.SensorsSnapshotAvro;
-//
-//import java.time.Duration;
-//import java.util.HashMap;
-//import java.util.List;
-//import java.util.Map;
-//
-//@Slf4j
-//@Component
-//@RequiredArgsConstructor
-//public class SnapshotProcessor implements Runnable {
-//
-//    private final Duration CONSUME_ATTEMPT_TIMEOUT = Duration.ofMillis(1000);
-//    private final List<String> TOPICS = List.of("telemetry.snapshots.v1");
-//    private final Map<TopicPartition, OffsetAndMetadata> currentOffsets = new HashMap<>();
-//
-//    private final KafkaConsumer<Void, SensorsSnapshotAvro> consumer;
-//    private final SnapshotAnalyzer snapshotAnalyzer;
-//
-//    @Override
-//    public void run() {
-//        try {
-//            Runtime.getRuntime().addShutdownHook(new Thread(consumer::wakeup));
-//            consumer.subscribe(TOPICS);
-//            while (true) {
-//                ConsumerRecords<Void, SensorsSnapshotAvro> records = consumer.poll(CONSUME_ATTEMPT_TIMEOUT);
-//                int count = 0;
-//                for (ConsumerRecord<Void, SensorsSnapshotAvro> record : records) {
-//                    SensorsSnapshotAvro event = record.value();
-//                    log.info(event.toString());
-//                    snapshotAnalyzer.analyze(event);
-//                    manageOffsets(record, count, consumer);
-//                    count++;
-//                }
-//                consumer.commitAsync();
-//            }
-//
-//        } catch (WakeupException ignores) {
-//        } catch (Exception e) {
-//            log.error("Ошибка во время обработки событий от датчиков", e);
-//        } finally {
-//
-//            try {
-//                consumer.commitSync(currentOffsets);
-//            } finally {
-//                log.info("Закрываем консьюмер");
-//                consumer.close();
-//            }
-//        }
-//    }
-//
-//    private void manageOffsets(ConsumerRecord<Void, SensorsSnapshotAvro> record, int count, KafkaConsumer<Void, SensorsSnapshotAvro> consumer) {
-//        currentOffsets.put(
-//                new TopicPartition(record.topic(), record.partition()),
-//                new OffsetAndMetadata(record.offset() + 1)
-//        );
-//
-//        if (count % 10 == 0) {
-//            consumer.commitAsync(currentOffsets, (offsets, exception) -> {
-//                if (exception != null) {
-//                    log.warn("Ошибка во время фиксации оффсетов: {}", offsets, exception);
-//                }
-//            });
-//        }
-//    }
-//
-//}
-
 package ru.yandex.practicum.telemetry.analyzer.service;
 
 import lombok.RequiredArgsConstructor;
@@ -135,15 +56,7 @@ public class SnapshotProcessor implements Runnable {
         SensorsSnapshotAvro snapshot = record.value();
 
         try {
-            log.info(
-                    "Processing snapshot: hubId={}, partition={}, offset={}",
-                    snapshot.getHubId(),
-                    record.partition(),
-                    record.offset()
-            );
-
             snapshotAnalyzer.analyze(snapshot);
-
             offsetsToCommit.put(
                     new TopicPartition(record.topic(), record.partition()),
                     new OffsetAndMetadata(record.offset() + 1)
@@ -188,4 +101,5 @@ public class SnapshotProcessor implements Runnable {
             log.info("SnapshotProcessor stopped");
         }
     }
+
 }

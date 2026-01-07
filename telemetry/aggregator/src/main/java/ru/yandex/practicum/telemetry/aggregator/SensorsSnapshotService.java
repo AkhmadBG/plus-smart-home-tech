@@ -49,6 +49,8 @@ public class SensorsSnapshotService {
 
         sensorsState.put(event.getId(), newState);
         sensorsSnapshotAvro.setTimestamp(event.getTimestamp());
+        sensorsSnapshotAvro.setSensorsState(sensorsState);
+        log.info("from SensorsSnapshotService: New sensorsSnapshotAvro {}", sensorsSnapshotAvro);
 
         return Optional.of(sensorsSnapshotAvro);
     }

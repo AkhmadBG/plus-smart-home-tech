@@ -37,4 +37,5 @@ public class GeneralAvroDeserializer<T extends SpecificRecordBase>
             );
         }
     }
+
 }

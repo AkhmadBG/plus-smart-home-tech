@@ -1,12 +1,3 @@
-#analyzer:
-#  kafka:
-#    common-properties:
-#      "bootstrap.servers": localhost:9092
-#      "key.serializer": "org.apache.kafka.common.serialization.StringSerializer"
-#      "value.serializer": "ru.yandex.practicum.kafka.serializer.GeneralAvroSerializer"
-#    consumers:
-#      topics: "topic"
-
 server:
   port: 8082
 

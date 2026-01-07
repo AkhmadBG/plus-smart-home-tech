@@ -25,6 +25,7 @@ public class Condition {
     @Enumerated(EnumType.STRING)
     private ConditionOperationAvro operation;
 
+    @Column(name = "value")
     private Integer value;
 
     @ManyToOne

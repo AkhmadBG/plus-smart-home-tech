@@ -3,8 +3,6 @@ package ru.yandex.practicum.telemetry.analyzer.entity;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.util.List;
-
 @Getter
 @Setter
 @NoArgsConstructor
@@ -25,12 +23,5 @@ public class Scenario {
     private String hubId;
 
     private String name;
-
-    @OneToMany(mappedBy = "scenario")
-    private List<Condition> conditions;
-
-    @OneToMany(mappedBy = "scenario")
-    private List<Action> actions;
-
 
 }
