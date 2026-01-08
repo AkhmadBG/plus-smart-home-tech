@@ -1,6 +1,5 @@
 package ru.yandex.practicum.telemetry.analyzer.service;
 
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.apache.kafka.clients.consumer.ConsumerRecords;
@@ -10,6 +9,7 @@ import org.apache.kafka.common.TopicPartition;
 import org.apache.kafka.common.errors.WakeupException;
 import org.springframework.stereotype.Component;
 import ru.yandex.practicum.kafka.telemetry.event.HubEventAvro;
+import ru.yandex.practicum.telemetry.analyzer.config.KafkaConfig;
 
 import java.time.Duration;
 import java.util.HashMap;
@@ -18,15 +18,21 @@ import java.util.Map;
 
 @Slf4j
 @Component
-@RequiredArgsConstructor
 public class HubEventProcessor implements Runnable {
 
-    private final Duration CONSUME_ATTEMPT_TIMEOUT = Duration.ofMillis(1000);
-    private final List<String> TOPICS = List.of("telemetry.hubs.v1");
+    private final KafkaConsumer<Void, HubEventAvro> consumer;
+    private final List<String> TOPICS;
+    private final Duration CONSUME_ATTEMPT_TIMEOUT;
+    private final HubEventAnalyzer hubEventAnalyzer;
     private final Map<TopicPartition, OffsetAndMetadata> currentOffsets = new HashMap<>();
 
-    private final KafkaConsumer<Void, HubEventAvro> consumer;
-    private final HubEventAnalyzer hubEventAnalyzer;
+    public HubEventProcessor(KafkaConfig config, HubEventAnalyzer hubEventAnalyzer) {
+        this.hubEventAnalyzer = hubEventAnalyzer;
+        final KafkaConfig.ConsumerConfig consumerConfig = config.getConsumers().get("HubEventProcessor");
+        this.consumer = new KafkaConsumer<>(consumerConfig.getProperties());
+        this.TOPICS = consumerConfig.getTopics();
+        this.CONSUME_ATTEMPT_TIMEOUT = consumerConfig.getPollTimeout();
+    }
 
     @Override
     public void run() {

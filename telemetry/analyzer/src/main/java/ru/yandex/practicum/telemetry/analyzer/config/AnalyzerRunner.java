@@ -10,8 +10,8 @@ import ru.yandex.practicum.telemetry.analyzer.service.SnapshotProcessor;
 @AllArgsConstructor
 public class AnalyzerRunner implements CommandLineRunner {
 
-    final HubEventProcessor hubEventProcessor;
-    final SnapshotProcessor snapshotProcessor;
+    private final HubEventProcessor hubEventProcessor;
+    private final SnapshotProcessor snapshotProcessor;
 
     @Override
     public void run(String... args) throws Exception {

@@ -1,30 +1,35 @@
 package ru.yandex.practicum.telemetry.analyzer.service;
 
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.clients.consumer.*;
 import org.apache.kafka.common.TopicPartition;
 import org.apache.kafka.common.errors.WakeupException;
 import org.springframework.stereotype.Component;
 import ru.yandex.practicum.kafka.telemetry.event.SensorsSnapshotAvro;
+import ru.yandex.practicum.telemetry.analyzer.config.KafkaConfig;
 
 import java.time.Duration;
 import java.util.*;
 
 @Slf4j
 @Component
-@RequiredArgsConstructor
 public class SnapshotProcessor implements Runnable {
 
-    private static final Duration POLL_TIMEOUT = Duration.ofSeconds(1);
-    private static final int COMMIT_BATCH_SIZE = 10;
-    private static final List<String> TOPICS = List.of("telemetry.snapshots.v1");
-
     private final KafkaConsumer<Void, SensorsSnapshotAvro> consumer;
+    private final List<String> TOPICS;
     private final SnapshotAnalyzer snapshotAnalyzer;
-
+    private final Duration CONSUME_ATTEMPT_TIMEOUT;
     private final Map<TopicPartition, OffsetAndMetadata> offsetsToCommit = new HashMap<>();
+    private static final int COMMIT_BATCH_SIZE = 10;
     private int processedCount = 0;
+
+    public SnapshotProcessor(KafkaConfig config, SnapshotAnalyzer snapshotAnalyzer) {
+        this.snapshotAnalyzer = snapshotAnalyzer;
+        final KafkaConfig.ConsumerConfig consumerConfig = config.getConsumers().get("SnapshotProcessor");
+        this.consumer = new KafkaConsumer<>(consumerConfig.getProperties());
+        this.TOPICS = consumerConfig.getTopics();
+        this.CONSUME_ATTEMPT_TIMEOUT = consumerConfig.getPollTimeout();
+    }
 
     @Override
     public void run() {
@@ -34,7 +39,7 @@ public class SnapshotProcessor implements Runnable {
 
             while (!Thread.currentThread().isInterrupted()) {
                 ConsumerRecords<Void, SensorsSnapshotAvro> records =
-                        consumer.poll(POLL_TIMEOUT);
+                        consumer.poll(CONSUME_ATTEMPT_TIMEOUT);
 
                 for (ConsumerRecord<Void, SensorsSnapshotAvro> record : records) {
                     processRecord(record);
