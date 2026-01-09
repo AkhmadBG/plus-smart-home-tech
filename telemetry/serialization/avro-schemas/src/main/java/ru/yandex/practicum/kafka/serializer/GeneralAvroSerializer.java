@@ -28,4 +28,5 @@ public class GeneralAvroSerializer implements Serializer<SpecificRecordBase> {
             throw new SerializationException("Ошибка сериализации данных для топика [" + topic + "]", ex);
         }
     }
+
 }

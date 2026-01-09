@@ -1,5 +1,6 @@
 package ru.yandex.practicum.telemetry.aggregator;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import ru.yandex.practicum.kafka.telemetry.event.SensorEventAvro;
 import ru.yandex.practicum.kafka.telemetry.event.SensorStateAvro;
@@ -9,6 +10,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
+@Slf4j
 @Component
 public class SensorsSnapshotService {
 
@@ -22,6 +24,8 @@ public class SensorsSnapshotService {
             sensorsSnapshotAvro.setHubId(event.getHubId());
             sensorsSnapshotAvro.setSensorsState(new HashMap<>());
             sensorsSnapshotAvro.setTimestamp(event.getTimestamp());
+            log.info("from SensorsSnapshotService: New sensorsSnapshotAvro {}", sensorsSnapshotAvro);
+            log.info("from SensorsSnapshotService: hubid {}", sensorsSnapshotAvro.getHubId());
             sensorsSnapshots.put(event.getHubId(), sensorsSnapshotAvro);
         }
 
@@ -45,6 +49,8 @@ public class SensorsSnapshotService {
 
         sensorsState.put(event.getId(), newState);
         sensorsSnapshotAvro.setTimestamp(event.getTimestamp());
+        sensorsSnapshotAvro.setSensorsState(sensorsState);
+        log.info("from SensorsSnapshotService: New sensorsSnapshotAvro {}", sensorsSnapshotAvro);
 
         return Optional.of(sensorsSnapshotAvro);
     }

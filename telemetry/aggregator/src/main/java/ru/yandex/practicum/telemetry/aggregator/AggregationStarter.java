@@ -42,8 +42,10 @@ public class AggregationStarter implements ApplicationRunner {
                 int count = 0;
                 for (ConsumerRecord<Void, SensorEventAvro> record : records) {
                     SensorEventAvro event = record.value();
+                    log.info("from AggregationStarter: hubid {}", event.getHubId());
                     Optional<SensorsSnapshotAvro> sensorsSnapshotAvro = sensorsSnapshotService.updateState(event);
                     sensorsSnapshotAvro.ifPresent(snapshotAvro -> producer.send(new ProducerRecord<>("telemetry.snapshots.v1", snapshotAvro)));
+                    log.info("from AggregationStarter: {}", sensorsSnapshotAvro);
                     manageOffsets(record, count, consumer);
                     count++;
                 }
