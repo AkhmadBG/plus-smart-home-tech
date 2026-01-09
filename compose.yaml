@@ -33,3 +33,23 @@ services:
                              --partitions 1 --replication-factor 1 --if-not-exists \
                              --bootstrap-server kafka:29092'"
     init: true
+
+  postgres:
+    image: postgres:16.1
+    container_name: postgres-plus-smart-home-tech-db
+    ports:
+      - "6541:5432"
+    environment:
+      POSTGRES_DB: psht_db
+      POSTGRES_USER: psht_db
+      POSTGRES_PASSWORD: psht_db
+    volumes:
+      - data:/var/lib/postgresql/data
+    healthcheck:
+      test: pg_isready -q -d $$POSTGRES_DB -U $$POSTGRES_USER
+      timeout: 5s
+      interval: 5s
+      retries: 10
+
+volumes:
+  data:

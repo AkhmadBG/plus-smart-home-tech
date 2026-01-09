@@ -1,12 +1,14 @@
 package ru.yandex.practicum.telemetry.collector.service.handler.sensor;
 
 import org.springframework.stereotype.Component;
+import ru.yandex.practicum.grpc.telemetry.event.LightSensorProto;
+import ru.yandex.practicum.grpc.telemetry.event.SensorEventProto;
 import ru.yandex.practicum.kafka.telemetry.event.LightSensorEventAvro;
 import ru.yandex.practicum.kafka.telemetry.event.SensorEventAvro;
 import ru.yandex.practicum.telemetry.collector.kafka.KafkaClient;
 import ru.yandex.practicum.telemetry.collector.model.LightSensorEvent;
-import ru.yandex.practicum.telemetry.collector.model.SensorEvent;
-import ru.yandex.practicum.telemetry.collector.model.SensorEventType;
+
+import java.time.Instant;
 
 @Component(value = "LIGHT_SENSOR_EVENT")
 public class LightSensorEventHandler extends BaseSensorEventHandler<LightSensorEvent> {
@@ -16,21 +18,27 @@ public class LightSensorEventHandler extends BaseSensorEventHandler<LightSensorE
     }
 
     @Override
-    public SensorEventType getMessageType() {
-        return SensorEventType.LIGHT_SENSOR_EVENT;
+    public SensorEventProto.PayloadCase getMessageType() {
+        return SensorEventProto.PayloadCase.LIGHT_SENSOR;
     }
 
     @Override
-    public SensorEventAvro mapToAvro(SensorEvent event) {
-        LightSensorEvent lightSensorEvent = (LightSensorEvent) event;
+    public SensorEventAvro mapToAvro(SensorEventProto event) {
+
+        LightSensorProto lightSensorEvent = event.getLightSensor();
         LightSensorEventAvro lightSensorEventAvro = LightSensorEventAvro.newBuilder()
                 .setLinkQuality(lightSensorEvent.getLinkQuality())
                 .setLuminosity(lightSensorEvent.getLuminosity())
                 .build();
+
+        Instant instant = Instant.ofEpochSecond(
+                event.getTimestamp().getSeconds(),
+                event.getTimestamp().getNanos());
+
         return SensorEventAvro.newBuilder()
-                .setId(lightSensorEvent.getId())
-                .setHubId(lightSensorEvent.getHubId())
-                .setTimestamp(lightSensorEvent.getTimestamp())
+                .setId(event.getId())
+                .setHubId(event.getHubId())
+                .setTimestamp(instant)
                 .setPayload(lightSensorEventAvro)
                 .build();
     }
