@@ -1,4 +1,4 @@
-CREATE SCHEMA IF NOT EXISTS warehouse;
+-- CREATE SCHEMA IF NOT EXISTS warehouse;
 
 CREATE TABLE IF NOT EXISTS warehouse.warehouses (
     warehouse_id UUID PRIMARY KEY,

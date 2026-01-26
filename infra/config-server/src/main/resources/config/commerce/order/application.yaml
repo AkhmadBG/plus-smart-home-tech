@@ -6,11 +6,11 @@ spring:
     init:
       mode: always
   datasource:
-    url: jdbc:postgresql://localhost:6541/commerce_warehouse
+    url: jdbc:postgresql://localhost:6541/commerce_order
     username: psht_db
     password: psht_db
     driver-class-name: org.postgresql.Driver
   jpa:
     hibernate:
-      ddl-auto: update
+      ddl-auto: validate
     show-sql: true

@@ -1,6 +1,6 @@
 spring:
   application:
-    name: shopping-cart
+    name: payment
   config:
     import: "configserver:"
   cloud:

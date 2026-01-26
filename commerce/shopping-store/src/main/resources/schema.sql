@@ -1,4 +1,4 @@
-CREATE SCHEMA IF NOT EXISTS store;
+-- CREATE SCHEMA IF NOT EXISTS store;
 
 CREATE TABLE IF NOT EXISTS store.products (
     product_id UUID PRIMARY KEY,
