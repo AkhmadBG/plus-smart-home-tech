@@ -53,4 +53,10 @@ public class ShoppingCartController implements ShoppingCartOperations {
         return ResponseEntity.ok(shoppingCartDto);
     }
 
+    @GetMapping("/list")
+    public ResponseEntity<List<String>> getShoppingCartIdList(@RequestParam String userName) {
+        List<String> shoppingCartIdList = shoppingCartService.getShoppingCartIdList(userName);
+        return ResponseEntity.ok(shoppingCartIdList);
+    }
+
 }

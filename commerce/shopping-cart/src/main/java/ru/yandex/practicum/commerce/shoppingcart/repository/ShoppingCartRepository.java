@@ -6,6 +6,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import ru.yandex.practicum.commerce.shoppingcart.entity.ShoppingCart;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -18,5 +19,13 @@ public interface ShoppingCartRepository extends JpaRepository<ShoppingCart, UUID
             WHERE s.userName = :userName
             """)
     Optional<ShoppingCart> findShoppingCartByUserName(@Param("userName") String userName);
+
+    @Query("""
+            SELECT s.cartId 
+            FROM ShoppingCart s
+            WHERE s.userName = :userName
+            """
+    )
+    List<UUID> findAllShoppingCartIdByUserName(@Param("userName") String userName);
 
 }

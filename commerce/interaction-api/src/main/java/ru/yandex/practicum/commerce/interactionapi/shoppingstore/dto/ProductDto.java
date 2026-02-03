@@ -10,7 +10,6 @@ import ru.yandex.practicum.commerce.interactionapi.shoppingstore.enums.ProductSt
 import ru.yandex.practicum.commerce.interactionapi.shoppingstore.enums.QuantityState;
 
 import java.math.BigDecimal;
-import java.util.UUID;
 
 @Data
 @Builder

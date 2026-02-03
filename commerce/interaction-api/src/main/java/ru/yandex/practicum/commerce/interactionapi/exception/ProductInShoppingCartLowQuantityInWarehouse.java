@@ -1,4 +1,4 @@
-package ru.yandex.practicum.commerce.warehouse.exception;
+package ru.yandex.practicum.commerce.interactionapi.exception;
 
 public class ProductInShoppingCartLowQuantityInWarehouse extends RuntimeException {
     public ProductInShoppingCartLowQuantityInWarehouse(String message) {

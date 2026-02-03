@@ -5,10 +5,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.yandex.practicum.commerce.interactionapi.apiinterface.WarehouseOperations;
 import ru.yandex.practicum.commerce.interactionapi.shoppingcart.dto.ShoppingCartDto;
-import ru.yandex.practicum.commerce.interactionapi.warehouse.dto.AddProductToWarehouseRequest;
-import ru.yandex.practicum.commerce.interactionapi.warehouse.dto.AddressDto;
-import ru.yandex.practicum.commerce.interactionapi.warehouse.dto.BookedProductsDto;
-import ru.yandex.practicum.commerce.interactionapi.warehouse.dto.NewProductInWarehouseRequest;
+import ru.yandex.practicum.commerce.interactionapi.warehouse.dto.*;
 import ru.yandex.practicum.commerce.warehouse.service.WarehouseService;
 
 @RestController
@@ -40,6 +37,24 @@ public class WarehouseController implements WarehouseOperations {
     public ResponseEntity<AddressDto> getWarehouseAddress() {
         AddressDto addressDto = warehouseService.getWarehouseAddress();
         return ResponseEntity.ok().body(addressDto);
+    }
+
+    @PostMapping("/shipped")
+    public ResponseEntity<Void> shippedToDelivery(@RequestBody ShippedToDeliveryRequest shippedToDeliveryRequest) {
+        warehouseService.shippedToDelivery(shippedToDeliveryRequest);
+        return ResponseEntity.ok().build();
+    }
+
+    @PostMapping("/return")
+    public ResponseEntity<Void> returnProductsToWarehouse(@RequestBody ReturnProductsToWarehouseRequest returnProductsToWarehouseRequest) {
+        warehouseService.returnProductsToWarehouse(returnProductsToWarehouseRequest);
+        return ResponseEntity.ok().build();
+    }
+
+    @PostMapping("/assembly")
+    public ResponseEntity<BookedProductsDto> assemblyProductsForOrder(@RequestBody AssemblyProductsForOrderRequest assemblyProductsForOrderRequest) {
+        BookedProductsDto deliveryInfoDto = warehouseService.assemblyProductsForOrder(assemblyProductsForOrderRequest);
+        return ResponseEntity.ok().body(deliveryInfoDto);
     }
 
 }

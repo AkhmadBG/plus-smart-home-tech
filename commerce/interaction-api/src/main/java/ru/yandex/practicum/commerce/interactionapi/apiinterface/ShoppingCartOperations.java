@@ -28,4 +28,7 @@ public interface ShoppingCartOperations {
     ResponseEntity<ShoppingCartDto> changeProductQuantityInShoppingCart(@RequestParam String userName,
                                                                         @RequestBody ChangeProductQuantityRequest changeProductQuantityRequest);
 
+    @GetMapping("/list")
+    ResponseEntity<List<String>> getShoppingCartIdList(@RequestParam String userName);
+
 }
