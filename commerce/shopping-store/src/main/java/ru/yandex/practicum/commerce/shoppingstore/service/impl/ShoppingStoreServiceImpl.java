@@ -10,7 +10,7 @@ import ru.yandex.practicum.commerce.interactionapi.shoppingstore.dto.SetProductQ
 import ru.yandex.practicum.commerce.interactionapi.shoppingstore.enums.ProductCategory;
 import ru.yandex.practicum.commerce.interactionapi.shoppingstore.enums.ProductState;
 import ru.yandex.practicum.commerce.shoppingstore.entity.ProductInStore;
-import ru.yandex.practicum.commerce.shoppingstore.exception.ProductNotFoundException;
+import ru.yandex.practicum.commerce.interactionapi.exception.ProductNotFoundException;
 import ru.yandex.practicum.commerce.shoppingstore.mapper.ProductMapper;
 import ru.yandex.practicum.commerce.shoppingstore.repository.ShoppingStoreRepository;
 import ru.yandex.practicum.commerce.shoppingstore.service.ShoppingStoreService;

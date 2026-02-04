@@ -1,20 +1,6 @@
 spring:
   application:
     name: shopping-store
-  sql:
-    init:
-      mode: always
-  datasource:
-    url: jdbc:postgresql://localhost:6541/psht_db
-    username: psht_db
-    password: psht_db
-    driver-class-name: org.postgresql.Driver
-
-  jpa:
-    hibernate:
-      ddl-auto: validate
-    show-sql: true
-
   config:
     import: "configserver:"
   cloud:
@@ -31,3 +17,8 @@ eureka:
   client:
     serviceUrl:
       defaultZone: http://localhost:8761/eureka/
+  instance:
+    preferIpAddress: true
+    hostname: localhost
+    instance-id: "${spring.application.name}:${random.value}"
+    leaseRenewalIntervalInSeconds: 10

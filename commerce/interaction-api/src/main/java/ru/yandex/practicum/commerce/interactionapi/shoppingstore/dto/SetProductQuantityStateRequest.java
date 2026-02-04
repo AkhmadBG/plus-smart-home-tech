@@ -6,8 +6,6 @@ import lombok.Builder;
 import lombok.Data;
 import ru.yandex.practicum.commerce.interactionapi.shoppingstore.enums.QuantityState;
 
-import java.util.UUID;
-
 @Data
 @Builder
 public class SetProductQuantityStateRequest {

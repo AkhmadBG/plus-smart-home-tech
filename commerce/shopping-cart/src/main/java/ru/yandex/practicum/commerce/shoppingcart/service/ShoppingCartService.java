@@ -18,4 +18,6 @@ public interface ShoppingCartService {
 
     ShoppingCartDto changeProductQuantityInShoppingCart(String userName, ChangeProductQuantityRequest changeProductQuantityRequest);
 
+    List<String> getShoppingCartIdList(String userName);
+
 }

@@ -1,2 +1,22 @@
 server:
   port: 0
+
+spring:
+  aop:
+    proxy-target-class: true
+  sql:
+    init:
+      mode: always
+  datasource:
+    url: jdbc:postgresql://localhost:6541/commerce_shopping_cart
+    username: psht_db
+    password: psht_db
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    show-sql: true
+
+logging:
+  level:
+    root: INFO

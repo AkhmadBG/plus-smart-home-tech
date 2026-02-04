@@ -10,7 +10,7 @@ import ru.yandex.practicum.commerce.interactionapi.shoppingcart.dto.ShoppingCart
 import ru.yandex.practicum.commerce.interactionapi.shoppingcart.enums.ShoppingCartState;
 import ru.yandex.practicum.commerce.shoppingcart.entity.CartItem;
 import ru.yandex.practicum.commerce.shoppingcart.entity.ShoppingCart;
-import ru.yandex.practicum.commerce.shoppingcart.exception.NoShoppingCartException;
+import ru.yandex.practicum.commerce.interactionapi.exception.NoShoppingCartException;
 import ru.yandex.practicum.commerce.shoppingcart.mapper.ShoppingCartMapper;
 import ru.yandex.practicum.commerce.shoppingcart.repository.ShoppingCartRepository;
 import ru.yandex.practicum.commerce.shoppingcart.service.ShoppingCartService;
@@ -121,6 +121,14 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
         ShoppingCartDto shoppingCartDto = shoppingCartMapper.toShoppingCartDto(shoppingCartRepository.save(shoppingCart));
         warehouseFeignClient.checkProductQuantityInShoppingCart(shoppingCartDto);
         return shoppingCartDto;
+    }
+
+    @Override
+    public List<String> getShoppingCartIdList(String userName) {
+        List<UUID> shoppingCartIdList = shoppingCartRepository.findAllShoppingCartIdByUserName(userName);
+        return shoppingCartIdList.stream()
+                .map(UUID::toString)
+                .collect(Collectors.toList());
     }
 
 }

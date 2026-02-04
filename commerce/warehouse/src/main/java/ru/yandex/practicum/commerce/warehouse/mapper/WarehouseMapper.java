@@ -20,4 +20,5 @@ public interface WarehouseMapper {
     ProductInWarehouse toProductInWarehouse(
             NewProductInWarehouseRequest newProductInWarehouseRequest
     );
+
 }

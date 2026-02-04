@@ -6,10 +6,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import ru.yandex.practicum.commerce.interactionapi.shoppingcart.dto.ShoppingCartDto;
-import ru.yandex.practicum.commerce.interactionapi.warehouse.dto.AddProductToWarehouseRequest;
-import ru.yandex.practicum.commerce.interactionapi.warehouse.dto.AddressDto;
-import ru.yandex.practicum.commerce.interactionapi.warehouse.dto.BookedProductsDto;
-import ru.yandex.practicum.commerce.interactionapi.warehouse.dto.NewProductInWarehouseRequest;
+import ru.yandex.practicum.commerce.interactionapi.warehouse.dto.*;
 
 public interface WarehouseOperations {
 
@@ -24,5 +21,14 @@ public interface WarehouseOperations {
 
     @GetMapping("/address")
     ResponseEntity<AddressDto> getWarehouseAddress();
+
+    @PostMapping("/shipped")
+    ResponseEntity<Void> shippedToDelivery(@RequestBody ShippedToDeliveryRequest shippedToDeliveryRequest);
+
+    @PostMapping("/return")
+    ResponseEntity<Void> returnProductsToWarehouse(@RequestBody ReturnProductsToWarehouseRequest returnProductsToWarehouseRequest);
+
+    @PostMapping("/assembly")
+    ResponseEntity<BookedProductsDto> assemblyProductsForOrder(@RequestBody AssemblyProductsForOrderRequest assemblyProductsForOrderRequest);
 
 }
