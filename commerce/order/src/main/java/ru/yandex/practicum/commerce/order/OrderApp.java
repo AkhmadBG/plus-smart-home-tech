@@ -7,7 +7,10 @@ import org.springframework.cloud.openfeign.EnableFeignClients;
 @EnableFeignClients(basePackages = {
         "ru.yandex.practicum.commerce.interactionapi"
 })
-@SpringBootApplication
+@SpringBootApplication(scanBasePackages = {
+        "ru.yandex.practicum.commerce.order",
+        "ru.yandex.practicum.commerce.interactionapi"
+})
 public class OrderApp {
 
     public static void main(String[] args) {

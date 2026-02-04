@@ -5,6 +5,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.yandex.practicum.commerce.interactionapi.apiinterface.WarehouseOperations;
 import ru.yandex.practicum.commerce.interactionapi.shoppingcart.dto.ShoppingCartDto;
+import ru.yandex.practicum.commerce.interactionapi.util.Logging;
 import ru.yandex.practicum.commerce.interactionapi.warehouse.dto.*;
 import ru.yandex.practicum.commerce.warehouse.service.WarehouseService;
 
@@ -15,24 +16,28 @@ public class WarehouseController implements WarehouseOperations {
 
     private final WarehouseService warehouseService;
 
+    @Logging
     @PutMapping
     public ResponseEntity<Void> newProductInWarehouse(@RequestBody NewProductInWarehouseRequest newProductInWarehouseRequest) {
         warehouseService.newProductInWarehouse(newProductInWarehouseRequest);
         return ResponseEntity.ok().build();
     }
 
+    @Logging
     @PostMapping("/check")
     public ResponseEntity<BookedProductsDto> checkProductQuantityInShoppingCart(@RequestBody ShoppingCartDto shoppingCartDto) {
         BookedProductsDto bookedProductsDto = warehouseService.checkProductQuantityInShoppingCart(shoppingCartDto);
         return ResponseEntity.ok().body(bookedProductsDto);
     }
 
+    @Logging
     @PostMapping("/add")
     public ResponseEntity<Void> addProductToWarehouse(@RequestBody AddProductToWarehouseRequest addProductToWarehouseRequest) {
         warehouseService.addProductToWarehouse(addProductToWarehouseRequest);
         return ResponseEntity.ok().build();
     }
 
+    @Logging
     @GetMapping("/address")
     public ResponseEntity<AddressDto> getWarehouseAddress() {
         AddressDto addressDto = warehouseService.getWarehouseAddress();
@@ -45,12 +50,14 @@ public class WarehouseController implements WarehouseOperations {
         return ResponseEntity.ok().build();
     }
 
+    @Logging
     @PostMapping("/return")
     public ResponseEntity<Void> returnProductsToWarehouse(@RequestBody ReturnProductsToWarehouseRequest returnProductsToWarehouseRequest) {
         warehouseService.returnProductsToWarehouse(returnProductsToWarehouseRequest);
         return ResponseEntity.ok().build();
     }
 
+    @Logging
     @PostMapping("/assembly")
     public ResponseEntity<BookedProductsDto> assemblyProductsForOrder(@RequestBody AssemblyProductsForOrderRequest assemblyProductsForOrderRequest) {
         BookedProductsDto deliveryInfoDto = warehouseService.assemblyProductsForOrder(assemblyProductsForOrderRequest);

@@ -120,7 +120,7 @@ public class GlobalExceptionHandler {
                         LocalDateTime.now()));
     }
 
-    @ExceptionHandler(ProductInShoppingCartNotInWarehouse.class)
+    @ExceptionHandler(OrderBookingNotFoundException.class)
     public ResponseEntity<ErrorResponse> handleOrderBookingNotFoundException(final OrderBookingNotFoundException e) {
         return ResponseEntity
                 .status(HttpStatus.NOT_FOUND)
@@ -130,7 +130,7 @@ public class GlobalExceptionHandler {
                         LocalDateTime.now()));
     }
 
-    @ExceptionHandler(ProductInShoppingCartNotInWarehouse.class)
+    @ExceptionHandler(PaymentNotFoundException.class)
     public ResponseEntity<ErrorResponse> handlePaymentNotFoundException(final PaymentNotFoundException e) {
         return ResponseEntity
                 .status(HttpStatus.NOT_FOUND)
